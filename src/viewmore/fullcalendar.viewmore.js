@@ -133,7 +133,7 @@
                                     event.appendTo(eventList).wrap('<li>');
                                 });
                                 
-                                eventList.append('<a class="ui-tooltip-close">x</a>').wrap('<div>');
+                                eventList.append('<a class="ui-tooltip-close"></a>').wrap('<div>');
                                 return eventList.parent('div').html();
                               },
                               position: {
