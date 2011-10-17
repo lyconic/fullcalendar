@@ -92,7 +92,7 @@
                 endDateLink = $.fullCalendar.formatDate(event.end, dateFormat),
                 maxEvents = self.opts.maxEvents,
                 allEvents = self.calendar.fullCalendar('clientEvents'),
-                eventDate = $.fullCalendar.formatDate(event.end || event.start,'MM/dd/yy'),
+                eventDate = $.fullCalendar.formatDate(event.end || event.start,'MM/dd/yyyy'),
                 td, $viewMoreButton;
     
             event.element = element;
@@ -116,7 +116,7 @@
                             $(this).tooltip({
                               content: function(){
                                 var startDate =  getDateFromCell(td, self.calendar),
-                                    startDateLabel = startDate.toString("MMM dS"),
+                                    startDateLabel = $.fullCalendar.formatDate(startDate,'MMM') + ' ' + $.fullCalendar.formatDate(startDate,'dS'),
                                     dayValue = parseInt(td.find('.fc-day-number').text()),
                                     eventList=$('<ul></ul>').prepend('<li><h5>' + startDateLabel + '</h5></li>'),
                                     appointments = td.data('appointments'),
@@ -202,10 +202,10 @@
         eventEnd = event._end || event._start,
         dateRange = expandDateRange(eventStart, eventEnd),
         eventElement = event.element;
-    
+
     $(dateRange).each(function(i){
-        var td = getCellFromDate($.fullCalendar.formatDate(dateRange[i],'MM/dd/yy'), calInstance),
-                currentCount = (td.data('apptCount') || 0) + 1;
+        var td = getCellFromDate($.fullCalendar.formatDate(dateRange[i],'MM/dd/yyyy'), calInstance),
+              currentCount = (td.data('apptCount') || 0) + 1;
 
         td.data('apptCount', currentCount);
         
@@ -239,10 +239,10 @@
   
   function getCellFromDate(thisDate, calInstance){ //ties events to actual table cells, and also differentiates between "gray" dates and "black" dates
     var start = calInstance.fullCalendar('getView').start,
-        end = calInstance.fullCalendar('getView').end,
-        td;
+          end = calInstance.fullCalendar('getView').end,
+          td;
 
-    thisDate = Date.parse(thisDate);
+    thisDate = new Date(thisDate);
             
     td = $('.fc-day-number').filter(function(){
       return $(this).text()===$.fullCalendar.formatDate(thisDate,'d')
