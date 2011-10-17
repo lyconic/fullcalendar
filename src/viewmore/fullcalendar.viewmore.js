@@ -53,18 +53,6 @@
 (function ($, undefined) {
   this.observers = function(){
     var self = this;
-
-    $(document).mouseup(function(e){  //deselect when clicking outside of calendar or formbubble
-      var $target = $(e.target),
-          isFormBubble = $target.parents('.form-bubble').length || $target.hasClass('form-bubble'),
-          isInsideOfCalendar = $target.parents('.fc-content').length || $target.hasClass('fc-content');
-
-      if (!isInsideOfCalendar && !isFormBubble) self.calendar.fullCalendar('unselect');
-    });
-
-    self.calendar.delegate('.fc-event','mousedown', function(){ //close currently open form bubbles when user clicks an existing event
-      $.fn.formBubble.close();
-    });
     
     self.calendar.delegate('.fc-button-prev, .fc-button-next', 'click', function(){
       resetEventsRangeCounts();
@@ -193,7 +181,6 @@
           if ($.isFunction(_eventResize)) _eventResize(event);
         },
         viewDisplay: function(view){
-          $.fn.formBubble.close();
           if (view.name !== 'month') resetEventsRangeCounts();
           if ($.isFunction(_viewDisplay)) _viewDisplay(view);
         },
