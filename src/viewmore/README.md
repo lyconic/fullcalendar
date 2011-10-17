@@ -16,8 +16,6 @@ I'd start with the most "starred" enhancement, the "view more" button.
 * [jQuery UI](http://jqueryui.com/) (included)
 * [FullCalendar](http://arshaw.com/fullcalendar/) (included)
 * [DateJS](http://www.datejs.com) (included)
-* [jQuery.formBubble](http://github.com/lyconic/formbubble) (included)
-* formbubble.css (included)
 * viewmore.css (included)
 
 **FullCalendar.viewMore** acts as a wrapper for FullCalendar, so that you can specify a maximum number of events per day. If the events exceed the max, a 'view more' button will be added to the date box.
