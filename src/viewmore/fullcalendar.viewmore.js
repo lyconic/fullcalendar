@@ -119,7 +119,7 @@
                     if (!td.find('.events-view-more').length) {
                         td.data('viewMore', true);
                         
-                        $viewMoreButton = $('<div class="events-view-more"><a href="#view-more" title="shit"><span>View More</span></a></div>')
+                        $viewMoreButton = $('<div class="events-view-more"><a href="#view-more" title=""><span>View More</span></a></div>')
                           .appendTo(td);
 
                         $viewMoreButton.find('a').bind('mouseover focusin mouseleave blur click', function(e){
@@ -131,13 +131,13 @@
                                     dayValue = parseInt(td.find('.fc-day-number').text()),
                                     eventList=$('<ul></ul>').prepend('<li><h5>' + startDateLabel + '</h5></li>'),
                                     appointments = td.data('appointments'),
-                                    elemWidth = 20;
-                        
+                                    elemWidth = $(td).outerWidth() - 20;
+
                                 $(appointments).each(function(){
                                     var apptStartDay = parseInt($.fullCalendar.formatDate(this.start,'d')), //should be comparing date instead of day (bug with gray dates) <-- fix
                                           apptEndDay = parseInt($.fullCalendar.formatDate(this.end,'d')),
                                           event = this.element.clone(false).attr('style', '').css('width', elemWidth);
-                        
+
                                     if (apptStartDay < dayValue) $(event).addClass('arrow-left');
                                     if (apptEndDay > dayValue) $(event).addClass('arrow-right');
                                     
@@ -164,6 +164,8 @@
                           }else{
                             e.stopImmediatePropagation();
                           }
+                          
+                          return false;
                         });
                           
                         if (!td.data('viewMore')) self.increaseHeight(25, false, td);                          
