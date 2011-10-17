@@ -105,7 +105,7 @@
                 maxEvents = self.opts.maxEvents,
                 allEvents = self.calendar.fullCalendar('clientEvents'),
                 eventDate = $.fullCalendar.formatDate(event.end || event.start,'MM/dd/yy'),
-                td, viewMoreButton;
+                td, $viewMoreButton;
     
             event.element = element;
             event.startDateLink = startDateLink;
@@ -118,17 +118,54 @@
                 if (td.data('apptCount') > maxEvents) {
                     if (!td.find('.events-view-more').length) {
                         td.data('viewMore', true);
-                        viewMoreButton = $('<div class="events-view-more"><a href="#view-more"><span>View More</span></a></div>')
-                        .appendTo(td)
-                        .click(function () {
-                          var viewMoreClick = self.opts.viewMoreClick;
-                          
-                            if (viewMoreClick && $.isFunction(viewMoreClick)) self.opts.viewMoreClick(td, self.calendar);
-                            else viewMore(td, self.calendar); //show events in formBubble overlay
-                            
-                            return false;
-                        });
                         
+                        $viewMoreButton = $('<div class="events-view-more"><a href="#view-more" title="shit"><span>View More</span></a></div>')
+                          .appendTo(td);
+
+                        $viewMoreButton.find('a').bind('mouseover focusin mouseleave blur click', function(e){
+                          if (e.type==="click"){
+                            $(this).tooltip({
+                              content: function(){
+                                var startDate =  getDateFromCell(td, self.calendar),
+                                    startDateLabel = startDate.toString("MMM dS"),
+                                    dayValue = parseInt(td.find('.fc-day-number').text()),
+                                    eventList=$('<ul></ul>').prepend('<li><h5>' + startDateLabel + '</h5></li>'),
+                                    appointments = td.data('appointments'),
+                                    elemWidth = 20;
+                        
+                                $(appointments).each(function(){
+                                    var apptStartDay = parseInt($.fullCalendar.formatDate(this.start,'d')), //should be comparing date instead of day (bug with gray dates) <-- fix
+                                          apptEndDay = parseInt($.fullCalendar.formatDate(this.end,'d')),
+                                          event = this.element.clone(false).attr('style', '').css('width', elemWidth);
+                        
+                                    if (apptStartDay < dayValue) $(event).addClass('arrow-left');
+                                    if (apptEndDay > dayValue) $(event).addClass('arrow-right');
+                                    
+                                    event.appendTo(eventList).wrap('<li>');
+                                });
+                                
+                                eventList.wrap('<div>');
+                                return eventList.parent('div').html();
+                              },
+                              position: {
+                                my: 'left top',
+                                at: 'left top',
+                                of: td
+                              },
+                              open: function(){
+                                var $tooltip = $('#' + $(this).attr('aria-describedby')),
+                                      padding = parseInt($tooltip.css('padding-left')) + parseInt($tooltip.css('padding-right')),
+                                      borders = parseInt($tooltip.css('border-left-width')) + parseInt($tooltip.css('border-right-width')),
+                                      width = $(td).outerWidth() - padding - borders;
+                                      
+                                $tooltip.css('width', width);
+                              }
+                            }).tooltip('open');
+                          }else{
+                            e.stopImmediatePropagation();
+                          }
+                        });
+                          
                         if (!td.data('viewMore')) self.increaseHeight(25, false, td);                          
                     }
                     if ($.isFunction(_eventRender)) _eventRender(event, element);
@@ -203,59 +240,6 @@
         $(this).find('.events-view-more').remove();
         $.removeData(this, "apptCount");
         $.removeData(this, "appointments");
-    });
-  }
-  
-  function viewMore(day, calInstance){
-    var appointments = day.data('appointments'),
-        elemWidth = day.outerWidth() + 1,
-        self = this;
-    
-    day.formBubble({
-      graphics: {
-        close: true,
-        pointer: false
-      },
-      offset: {
-        x: -elemWidth,
-        y: 0
-      },
-      animation: {
-          slide: false,
-          speed: 0
-      },
-      callbacks: {
-        onOpen: function(){
-          var bubble = $.fn.formBubble.bubbleObject;
-          
-          bubble.addClass('overlay');
-        },
-        onClose: function(){
-          calInstance.fullCalendar('unselect');
-        }
-      },
-      content: function(){
-        var startDate =  getDateFromCell(day, calInstance),
-            startDateLabel = startDate.toString("MMM dS"),
-            dayValue = parseInt(day.find('.fc-day-number').text()),
-            eventList=$('<ul></ul>').prepend('<li><h5>' + startDateLabel + '</h5></li>');
-            
-        elemWidth = elemWidth - 30;
-
-        $(appointments).each(function(){
-            var apptStartDay = parseInt($.fullCalendar.formatDate(this.start,'d')), //should be comparing date instead of day (bug with gray dates) <-- fix
-                    apptEndDay = parseInt($.fullCalendar.formatDate(this.end,'d')),
-                    event = this.element.clone(false).attr('style', '').css('width', elemWidth);
-
-            if (apptStartDay < dayValue) $(event).addClass('arrow-left');
-            if (apptEndDay > dayValue) $(event).addClass('arrow-right');
-            
-            event.appendTo(eventList).wrap('<li>');
-        });
-        
-        eventList.wrap('<div>');
-        return eventList.parent('div').html();
-      }
     });
   }
   
