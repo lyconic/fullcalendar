@@ -10,6 +10,13 @@
   float:right;
 }
 
+.ui-tooltip-close{
+  cursor:pointer;
+  position:absolute;
+  top:0;
+  right:0;
+}
+
 .ui-tooltip ul{
   list-style-type: none;
   margin: 0;

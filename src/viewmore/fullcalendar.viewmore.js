@@ -120,9 +120,10 @@
                         td.data('viewMore', true);
                         
                         $viewMoreButton = $('<div class="events-view-more"><a href="#view-more" title=""><span>View More</span></a></div>')
-                          .appendTo(td);
+                          .appendTo(td)
+                          .find('a');
 
-                        $viewMoreButton.find('a').bind('mouseover focusin mouseleave blur click', function(e){
+                        $viewMoreButton.bind('mouseover focusin mouseleave blur click', function(e){
                           if (e.type==="click"){
                             $(this).tooltip({
                               content: function(){
@@ -144,7 +145,7 @@
                                     event.appendTo(eventList).wrap('<li>');
                                 });
                                 
-                                eventList.wrap('<div>');
+                                eventList.append('<a class="ui-tooltip-close">x</a>').wrap('<div>');
                                 return eventList.parent('div').html();
                               },
                               position: {
@@ -158,7 +159,11 @@
                                       borders = parseInt($tooltip.css('border-left-width')) + parseInt($tooltip.css('border-right-width')),
                                       width = $(td).outerWidth() - padding - borders;
                                       
-                                $tooltip.css('width', width);
+                                $tooltip.css('width', width)
+                                  .find('.ui-tooltip-close').click(function(){
+                                    $viewMoreButton.tooltip('close');
+                                    return false;
+                                  });
                               }
                             }).tooltip('open');
                           }else{
