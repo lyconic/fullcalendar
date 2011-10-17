@@ -14,6 +14,9 @@ I'd start with the most "starred" enhancement, the "view more" button.
 
 * [jQuery](http://jquery.com) (included)
 * [jQuery UI](http://jqueryui.com/) (included)
+* jQuery UI 1.9 Widget (included)
+* jQuery UI 1.9 Position (included)
+* jQuery UI 1.9 Tooltip (included)
 * [FullCalendar](http://arshaw.com/fullcalendar/) (included)
 * [DateJS](http://www.datejs.com) (included)
 * viewmore.css (included)
