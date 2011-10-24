@@ -139,7 +139,8 @@
                               position: {
                                 my: 'left top',
                                 at: 'left top',
-                                of: td
+                                of: td,
+                                collision: 'none'
                               },
                               open: function(){
                                 var $tooltip = $('#' + $(this).attr('aria-describedby')),
