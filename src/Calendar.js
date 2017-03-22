@@ -1,4 +1,3 @@
-
  
 function Calendar(element, options, eventSources) {
 	var t = this;
@@ -323,7 +322,8 @@ function Calendar(element, options, eventSources) {
 	
 	
 	function refetchEvents() {
-		fetchEvents(currentView.visStart, currentView.visEnd); // will call reportEvents
+            trigger('refetchEvents');
+	    fetchEvents(currentView.visStart, currentView.visEnd); // will call reportEvents
 	}
 	
 	

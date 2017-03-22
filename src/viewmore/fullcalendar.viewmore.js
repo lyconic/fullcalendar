@@ -90,6 +90,7 @@
     var self = this,
         opt = self.calendar.fullCalendar('getView').calendar.options,
         _eventRender = opt.eventRender,
+        _refetchEvents = opt.refetchEvents,
         _eventDrop = opt.eventDrop,
         _eventResize = opt.eventResize,
         _viewDisplay = opt.viewDisplay,
@@ -139,6 +140,10 @@
             }
             if ($.isFunction(_eventRender)) _eventRender(event, element);
             return true; //renders event
+        },
+        refetchEvents: function (start, end) {
+          resetEventsRangeCounts();
+          if ($.isFunction(_refetchEvents)) _refetchEvents(start, end);
         },
         eventDrop: function (event, dayDelta, minuteDelta, allDay, revertFunc) {
           resetEventsRangeCounts();
